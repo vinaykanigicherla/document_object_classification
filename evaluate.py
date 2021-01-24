@@ -5,6 +5,7 @@ import numpy as np
 from torchvision import datasets, models, transforms
 from torch.utils.data import DataLoader
 import os
+from tqdm import tqdm
 
 from models import make_model
 from dataset import DOCDataset
@@ -23,6 +24,11 @@ def test(model_path):
     dataloader = DataLoader(dataset=DOCDataset(data_dir, test), batch_size=batch_size)
 
     correct, total = 0
-    for img, label in tqdm(dataloader):
+    for imgs, labels in tqdm(dataloader):
         with torch.no_grad():
-            pass
+            output = model_ft(imgs)
+            _, predicted = torch.max(output.data, 1)
+            correct += (predicted == labels).sum().item()
+            total += labels.size(0)
+    print("Accuracy: {.:2f}".format(correct/total))
+
