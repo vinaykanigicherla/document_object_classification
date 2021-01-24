@@ -4,10 +4,12 @@ import torch.optim as optim
 import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
+from torch.utils.data import DataLoader
 import os
 
 from dataset import DOCDataset
 from trainer import Trainer
+from models import make_model
 
 def main():
     data_dir = "data"
@@ -22,13 +24,11 @@ def main():
                                                 transforms.ToTensor(), 
                                                 transforms.Normalize([0.485, 0.456, 0.406], [0.299, 0.224, 0.225]))
 
-    dataloaders_dict = {split: torch.utils.data.DataLoader(dataset=DOCDataset(data_dir, split, composed_data_transforms), batch_size=batch_size, shuffle=True)
+    dataloaders_dict = {split: DataLoader(dataset=DOCDataset(data_dir, split, composed_data_transforms), batch_size=batch_size, shuffle=True)
                     for split in ["train", "val"]}
 
 
-    model_ft = models.squeezenet1_0(pretrained=True)
-    model_ft.classifier[1] = nn.Conv2d(512, num_classes, kernel_size=(1,1), stride=(1,1))
-    model_ft.num_classes = num_classes
+    model_ft = make_model("squeezenet", num_classes)
 
     model_ft = model_ft.to(device)
     criterion = nn.CrossEntropyLoss()

@@ -3,7 +3,7 @@ from cv2 import cv2
 from torch.utils.data import Dataset
 
 class DOCDataset(Dataset):
-    def __init__(self, data_dir, split, transform):
+    def __init__(self, data_dir, split, transform=None):
         assert split in ["train", "val", "test"]
         self.data_dir = data_dir
         self.split = split
