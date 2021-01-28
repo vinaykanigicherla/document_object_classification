@@ -1,5 +1,6 @@
 import os
 import torch
+import torch.nn.functional as F
 from tqdm import tqdm
 
 class Trainer():
@@ -51,7 +52,7 @@ class Trainer():
 
             with torch.set_grad_enabled(phase=="train"):
                 outputs = self.model(inputs)
-                _, preds = torch.max(outputs, 1)
+                probs, preds = torch.nn.Softmax(outputs, dim=1).topk(1, dim=1)
                 loss = self.criterion(outputs, labels)
 
                 if phase == "train":
@@ -75,7 +76,7 @@ class Trainer():
     def save_model(self, epoch):
         if not os.path.isdir(self.model_save_dir):
             os.mkdir(self.model_save_dir)
-        save_path = os.path.join(self.model_save_dir, str(epoch) + "_best" + ".ckpt")
+        save_path = os.path.join(self.model_save_dir, str(epoch) + "_best" + ".pt")
         print("Saving checkpoint to {}".format(save_path))
 
         torch.save({

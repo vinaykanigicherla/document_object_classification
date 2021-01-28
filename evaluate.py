@@ -27,7 +27,7 @@ def test(model_path):
     for imgs, labels in tqdm(dataloader):
         with torch.no_grad():
             output = model_ft(imgs)
-            _, predicted = torch.max(output.data, 1)
+            probs, predicted = torch.nn.Softmax(output, dim=1).topk(1, dim=1)
             correct += (predicted == labels).sum().item()
             total += labels.size(0)
     print("Accuracy: {.:2f}".format(correct/total))

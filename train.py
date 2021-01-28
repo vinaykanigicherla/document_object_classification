@@ -42,5 +42,6 @@ def main():
 
 if __name__ == "__main__":
     best_model = main()
+    torch.save(best_model, "models/best_model.pt")
 
 
