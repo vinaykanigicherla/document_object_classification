@@ -55,14 +55,16 @@ def from_iiit_dataset(input_dir, output_dir, splits_dict, labels_dict):
         f.writelines(errors)
 
 if __name__ == "__main__":
-    """
     parser = argparse.ArgumentParser(description="Create balanced datasets with equal number of training data for each class")
     parser.add_argument("input_dir", type=str, help="Path to directory with images and xml folders")
     parser.add_argument("output_dir", type=str, help="Path to output directory containing train, val, and test folders")
+    parser.add_argument("--train_size", type=int, default=2000, help="Size of train dir")
+    parser.add_argument("--val_size", type=int, default=400, help="Size of train dir")
+    parser.add_argument("--test_size", type=int, defualt==400, help="Size of train dir")
     args = parser.parse_args()
-    """
-    splits_dict = {"train": 2000, "val": 400, "test": 400}
+
+    splits_dict = {"train": args.train_size, "val": args.val_size, "test": args.test_size}
     labels_dict = {"table": 0, "figure": 1, "natural_image": 2}
     
-    from_iiit_dataset("raw_data", "data", splits_dict, labels_dict)
+    from_iiit_dataset(args.output_dir, args.input_dir, splits_dict, labels_dict)
 

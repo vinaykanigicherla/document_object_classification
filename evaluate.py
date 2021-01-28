@@ -30,5 +30,11 @@ def test(model_path):
             probs, predicted = torch.nn.Softmax(output, dim=1).topk(1, dim=1)
             correct += (predicted == labels).sum().item()
             total += labels.size(0)
-    print("Accuracy: {.:2f}".format(correct/total))
+    print("Model Accuracy: {.:2f}".format(correct/total))
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Evaluate model specified at path on test set")
+    parser.add_argument("path", type=str, help="Path to model")
+    args = parser.parse_args()
+    test(args.path)
 
